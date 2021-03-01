@@ -15,6 +15,10 @@ public class Tree {
     private String name;
     private RankedAlphabet alphabet;
 
+    public Tree(){
+
+    }
+
     public Tree(String s, String data, int i, RankedAlphabet a){
         this.root = new Node(data, i, null);
         this.root.setHeight(1);

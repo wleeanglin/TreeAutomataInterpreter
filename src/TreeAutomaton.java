@@ -1,5 +1,7 @@
 import java.util.ArrayList;
 import java.util.Collections;
+import java.io.BufferedReader;
+import java.io.IOException;
 
 public class TreeAutomaton {
     public static final String ANSI_RESET = "\u001B[0m";
@@ -18,6 +20,10 @@ public class TreeAutomaton {
     private ArrayList<String> finStates;
     private ArrayList<TransitionRule> rules;
     private String name;
+
+    public TreeAutomaton(){
+
+    }
 
     public TreeAutomaton(String s, RankedAlphabet a){
         this.name = s;
@@ -71,6 +77,18 @@ public class TreeAutomaton {
         return false;
     }
 
+    public int getRuleIndex(String element, ArrayList<String> states){
+        Collections.sort(states);
+        for(int i = 0; i < rules.size(); i++){
+            ArrayList<String> a = (ArrayList<String>) rules.get(i).getCurrentStates().clone();
+            Collections.sort(a);
+            if(rules.get(i).getElement().equals(element) && a.equals(states)){
+                return i;
+            }
+        }
+        return -1;
+    }
+
     public TransitionRule getRule(String data, ArrayList<String> children){
         Collections.sort(children);
         for(int i = 0; i < rules.size(); i++){
@@ -81,6 +99,10 @@ public class TreeAutomaton {
             }
         }
         return null;
+    }
+
+    public ArrayList<TransitionRule> getRules(){
+        return this.rules;
     }
 
     public void printRules(){
@@ -187,6 +209,195 @@ public class TreeAutomaton {
             }
             System.out.println();
         }
+    }
+
+    public void modify(BufferedReader reader) throws IOException{
+        while(true){
+            System.out.println(ANSI_GREEN + "Current Rules of the Tree Automaton " + this.getName() + ANSI_RESET);
+            this.printRules();
+            System.out.println(ANSI_GREEN + "Current Final States of the Tree Automaton " + this.getName() + ANSI_RESET);
+            for(int i = 0; i < this.getFinStates().size(); i++){
+                System.out.println(ANSI_CYAN + this.getFinStates().get(i) + ANSI_RESET);
+            }
+            while(true){
+                System.out.println(ANSI_GREEN + "Modify [r]ules/[f]inal states or go [b]ack");
+                String input = reader.readLine().toLowerCase();
+                if(input.equals("b") || input.equals("back")){
+                    return;
+                } else if(input.equals("r") || input.equals("rules")){
+                    modifyRules(reader);
+                    break;
+                } else if(input.equals("f") || input.equals("final")){
+                    modifyFinalStates(reader);
+                    break;
+                } else{
+                    System.out.println(ANSI_RED + "Command not recognised" + ANSI_RESET);
+                }
+            }
+        }
+    }
+
+    public void modifyRules(BufferedReader reader) throws IOException{
+        while(true){
+            System.out.println(ANSI_GREEN + "[a]dd/[r]emove rule or go [b]ack");
+            String input = reader.readLine().toLowerCase();
+            if(input.equals("b") || input.equals("back")){
+                return;
+            } else if(input.equals("a") || input.equals("add")){
+                TransitionRule newRule = getRuleFromInput(reader);
+                if(newRule == null){
+                    continue;
+                }
+                //Check for existing rule with same element && starting states
+                if(this.checkDuplicateRule(newRule.getElement(), newRule.getCurrentStates())){
+                    System.out.println(ANSI_RED + "Rule already defined for this combination of element and current states." + ANSI_RESET);
+                    System.out.println(ANSI_GREEN + "In deterministic finite automaton no two transition rules can have the same left hand side." + ANSI_RESET);
+                    continue;
+                } else{
+                    this.addRule(newRule);
+                }
+                return;
+            } else if(input.equals("r") || input.equals("remove")){
+                TransitionRule toRemove = getRuleFromInput(reader);
+                if(toRemove == null){
+                    continue;
+                }
+                System.out.println(getRuleIndex(toRemove.getElement(), toRemove.getCurrentStates()));
+                if(getRuleIndex(toRemove.getElement(), toRemove.getCurrentStates()) != -1){
+                    this.rules.remove(getRuleIndex(toRemove.getElement(), toRemove.getCurrentStates()));
+                } else {
+                    System.out.println(ANSI_RED + "No rule found with element " + toRemove.getElement() + " and current states; ");
+                    for(int i = 0; i < toRemove.getCurrentStates().size(); i++){
+                        System.out.printf("%s ", toRemove.getCurrentStates().get(i));
+                    }
+                    System.out.printf("\n");
+                }
+                return;
+            } else{
+                System.out.println(ANSI_RED + "Command not recognised" + ANSI_RESET);
+            }
+        }
+    }
+
+    public void modifyFinalStates(BufferedReader reader) throws IOException{
+        while(true){
+            ArrayList<String> unrecognizedStates = new ArrayList<>();
+            ArrayList<String> recognizedStates = new ArrayList<>();
+            System.out.println(ANSI_GREEN + "[a]dd/[r]emove final state or go [b]ack");
+            String input = reader.readLine().toLowerCase();
+            if(input.equals("b") || input.equals("back")){
+                return;
+            } else if(input.equals("a") || input.equals("add")){
+                System.out.println(ANSI_GREEN + "Enter states from the following to add to final state list;" + ANSI_RESET);
+                for(int i = 0; i < states.size(); i++){
+                    if(!finStates.contains(states.get(i))){
+                        System.out.println(ANSI_CYAN + states.get(i) + ANSI_RESET);
+                    }
+                }
+                String[] inputArray = reader.readLine().split(" ");
+                for(int i = 0; i < inputArray.length; i++){
+                    if(states.contains(inputArray[i]) && !finStates.contains(inputArray[i])){
+                        recognizedStates.add(inputArray[i]);
+                        this.finStates.add(inputArray[i]);
+                    } else {
+                        unrecognizedStates.add(inputArray[i]);
+                    }
+                }
+                if(recognizedStates.size() > 0){
+                    System.out.println(ANSI_GREEN + "The following states have been added as a final state;" + ANSI_RESET);
+                    for(int i = 0; i < recognizedStates.size(); i++){
+                        System.out.println(ANSI_CYAN + recognizedStates.get(i) + ANSI_RESET);
+                    }
+                }
+                if(unrecognizedStates.size() > 0){
+                    System.out.println(ANSI_RED + "The following states were not recognised or already recorded as final states;" + ANSI_RESET);
+                    for(int i = 0; i < unrecognizedStates.size(); i++){
+                        System.out.println(ANSI_RED + unrecognizedStates.get(i) + ANSI_RESET);
+                    }
+                    System.out.println(ANSI_GREEN + "The rest were stored correctly." + ANSI_RESET);
+                }
+            } else if(input.equals("r") || input.equals("remove")){
+                System.out.println(ANSI_GREEN + "Enter states from the following to remove to final state list;" + ANSI_RESET);
+                for(int i = 0; i < finStates.size(); i++){
+                    System.out.println(ANSI_CYAN + finStates.get(i) + ANSI_RESET);
+                }
+                String[] inputArray = reader.readLine().split(" ");
+
+                for(int i = 0; i < inputArray.length; i++){
+                    if(finStates.contains(inputArray[i])){
+                        recognizedStates.add(inputArray[i]);
+                        this.finStates.remove(inputArray[i]);
+                    } else {
+                        unrecognizedStates.add(inputArray[i]);
+                    }
+                }
+                if(recognizedStates.size() > 0){
+                    System.out.println(ANSI_GREEN + "The following states were removed as final states;" + ANSI_RESET);
+                    for(int i = 0; i < recognizedStates.size(); i++){
+                        System.out.println(ANSI_CYAN + recognizedStates.get(i) + ANSI_RESET);
+                    }
+                }
+                if(unrecognizedStates.size() > 0){
+                    System.out.println(ANSI_RED + "The following states were not recognised or are not currently final states;" + ANSI_RESET);
+                    for(int i = 0; i < unrecognizedStates.size(); i++){
+                        System.out.println(ANSI_RED + unrecognizedStates.get(i) + ANSI_RESET);
+                    }
+                    System.out.println(ANSI_GREEN + "The rest were removed correctly." + ANSI_RESET);
+                }
+            }
+        }
+    }
+
+    public TransitionRule getRuleFromInput(BufferedReader reader) throws IOException{
+        ArrayList<String> currentStates = new ArrayList<>();
+        System.out.println(ANSI_GREEN + "Enter transition rule in the form " + ANSI_YELLOW + "\"Element | stateBefore1, stateBefore2, ... | stateAfter\"" + ANSI_RESET);
+        String input = reader.readLine();
+        String[] inputArray = input.split(" ");
+        if(!this.alphabet.contains(inputArray[0].toLowerCase())){
+            System.out.println(ANSI_RED + "Element " + ANSI_CYAN + inputArray[0] + ANSI_RED + " is not a part of the alphabet " + ANSI_CYAN + alphabet.getName() + ANSI_RED + "." + ANSI_RESET);
+            System.out.println(ANSI_GREEN + "Please try again with an element from the following;" + ANSI_RESET);
+            for(int i = 0; i < alphabet.getAlph().size(); i++){
+                System.out.println(ANSI_CYAN + alphabet.getAlph().get(i) + ANSI_RESET);
+            }
+            return null;
+        }
+
+        TransitionRule current = new TransitionRule(inputArray[0].toLowerCase(), alphabet.getArity(inputArray[0].toLowerCase()));
+
+        if(inputArray.length < 4 + this.alphabet.getArity(inputArray[0].toLowerCase())){
+            System.out.println(ANSI_RED + "Not enough inputs. Please try again." + ANSI_RESET);
+            return null;
+        } else if(inputArray.length > 4 + alphabet.getArity(inputArray[0].toLowerCase())){
+            System.out.println(ANSI_RED + "Too many inputs. Please try again." + ANSI_RESET);
+            return null;
+        }
+
+        if(!inputArray[1].equals("|")){
+            System.out.println(ANSI_RED + "First separator \"|\" not found. Please try again." + ANSI_RESET);
+            return null;
+        }
+
+        int i = 2;
+        for(; i < 2 + this.alphabet.getArity(inputArray[0].toLowerCase()); i++){
+            if(inputArray[i].equals("|")){
+                System.out.println(ANSI_RED + "Second separator \"|\" found too early. Please try again." + ANSI_RESET);
+                System.out.println(ANSI_GREEN + "Element " + ANSI_CYAN + inputArray[0] + ANSI_GREEN + " has arity " + ANSI_CYAN + this.alphabet.getArity(inputArray[0].toLowerCase()) + ANSI_GREEN + " in alphabet " + ANSI_CYAN + this.alphabet.getName() + ANSI_GREEN + "." + ANSI_RESET);
+                return null;
+            } else {
+                currentStates.add(inputArray[i]);
+            }
+        }
+
+        if(!inputArray[i++].equals("|")){
+            System.out.println(ANSI_RED + "Second separator \"|\" not found. Please try again." + ANSI_RESET);
+            return null;
+        }
+
+        String newState = inputArray[i++];
+
+        current.setCurrentStates(currentStates);
+        current.setNewState(newState);
+        return current;
     }
 
 }

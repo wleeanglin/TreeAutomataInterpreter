@@ -15,6 +15,10 @@ public class TreeMain {
     public static final String ANSI_CYAN = "\u001B[36m";
     public static final String ANSI_WHITE = "\u001B[37m";
 
+    private String[] baseOptions = {"new", "modify", "operate", "save", "load", "help"};
+    private String[] newOptions = {"alphabet", "tree", "automaton", "back"};
+    private String[] modifyOptions = {"alphabet", "automaton", "back"};
+    private String[] saveOptions = {"alphabet", "tree", "automaton", "back"};
     private String[] commands = {"alphabet", "tree", "help", "automaton", "operate"};
     private ArrayList<RankedAlphabet> alphabets;
     private ArrayList<Tree> trees;
@@ -35,8 +39,187 @@ public class TreeMain {
         this.trees = new ArrayList<>();
         this.automata = new ArrayList<>();
         this.histories = new ArrayList<>();
-        waitForCommand();
+        try{
+            mainMenu();
+        } catch(IOException e){}
+        //waitForCommand();
     }
+
+    public void mainMenu() throws IOException{
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+
+        while(true){
+            printHeader("MAIN MENU");
+            printOptions(baseOptions);
+            String input = reader.readLine();
+            switch(input.toLowerCase()){
+                case "new":
+                    newMenu(reader);
+                    break;
+                case "modify":
+                    modifyMenu(reader);
+                    break;
+                case "operate":
+                    System.out.println(ANSI_WHITE + "|                OPERATE                |" + ANSI_RESET);
+                    readOperation(reader);
+                    break;
+                case "save":
+                    saveMenu(reader);
+                    break;
+                case "load":
+                    System.out.println(ANSI_WHITE + "|                 LOAD                  |" + ANSI_RESET);
+                    break;
+                case "help":
+                    printHelp();
+                    break;
+                default:
+                    System.out.println(ANSI_RED + "Command not recognised" + ANSI_RESET);
+            }
+        }
+    }
+
+    private void printHeader(String t){
+        //Fancy header :D
+        int i = ((30 - t.length()) / 2) - 1;
+        int j = (30 - (i + t.length())) - 2;
+        System.out.println(ANSI_WHITE + "*============================*");
+        System.out.printf("|");
+        for(int k = 0; k < i; k++){
+            System.out.printf(" ");
+        }
+        System.out.printf(t);
+        for(int k = 0; k < j; k++){
+            System.out.printf(" ");
+        }
+        System.out.printf("|\n");
+        System.out.println("*============================*" + ANSI_RESET);
+    }
+
+    private void printOptions(String[] a){
+        for(int i = 0; i < a.length; i++){
+            System.out.println(ANSI_CYAN + a[i] + ANSI_RESET);
+        }
+    }
+
+    private void newMenu(BufferedReader reader) throws IOException{
+        while(true){
+            printHeader("NEW");
+            printOptions(newOptions);
+            String input = reader.readLine();
+            switch(input.toLowerCase()){
+                case "alphabet":
+                    RankedAlphabet A = readAlph(reader);
+                    if(A != null){
+                        alphabets.add(A);
+                        return;
+                    }
+                    break;
+                case "tree":
+                    Tree B = readTree(reader);
+                    if(B != null) {
+                        trees.add(B);
+                        return;
+                    }
+                    break;
+                case "automaton":
+                    TreeAutomaton C = readAutomaton(reader);
+                    if(C != null){
+                        automata.add(C);
+                        return;
+                    }
+                case "back":
+                    return;
+                default:
+                    System.out.println(ANSI_RED + "Command not recognised" + ANSI_RESET);
+                    break;
+            }
+        }
+    }
+
+    private void modifyMenu(BufferedReader reader) throws IOException{
+        while(true){
+            printHeader("MODIFY");
+            printOptions(modifyOptions);
+            String input = reader.readLine();
+            switch(input.toLowerCase()){
+                case "alphabet":
+                    try{
+                        RankedAlphabet A = (RankedAlphabet) selectToModify("alphabet", this.alphabets, reader);
+                        if(A != null){
+                            A.modify(reader);
+                        }
+                    }
+                    catch(ClassCastException e){}
+                    return;
+                case "automaton":
+                    try{
+                        TreeAutomaton A = (TreeAutomaton) selectToModify("automaton", this.automata, reader);
+                        if(A != null){
+                            A.modify(reader);
+                        }
+                    }
+                    catch(ClassCastException e){}
+                    return;
+                case "back":
+                    return;
+                default:
+                    System.out.println(ANSI_RED + "Command not recognised" + ANSI_RESET);
+                    break;
+            }
+        }
+    }
+
+    private void saveMenu(BufferedReader reader) throws IOException{
+        while(true){
+            System.out.println(ANSI_WHITE + "|                 SAVE                  |" + ANSI_RESET);
+            printOptions(saveOptions);
+            String input = reader.readLine();
+            switch(input.toLowerCase()){
+                case "alphabet":
+
+                    break;
+                case "tree":
+
+                    break;
+                case "automaton":
+
+                case "back":
+                    return;
+                default:
+                    System.out.println(ANSI_RED + "Command not recognised" + ANSI_RESET);
+                    break;
+            }
+        }
+    }
+
+    public Object selectToModify(String type, ArrayList typeList, BufferedReader reader) throws IOException{
+        if(typeList.size() == 0){
+            System.out.println(ANSI_RED + "No objects of type " + type + " defined yet" + ANSI_RESET);
+            return null;
+        } else{
+            while(true){
+                System.out.println(ANSI_GREEN + "Please select object to modify from the following" + ANSI_RESET);
+                System.out.println(ANSI_GREEN + "Type \"back\" to return to the main menu" + ANSI_RESET);
+                for(int i = 0; i < typeList.size(); i++){
+                    System.out.println(ANSI_CYAN + getNameGeneral(typeList.get(i)) + ANSI_RESET);
+                }
+
+                String input = reader.readLine().toLowerCase();
+                if(input.equals("back") || input.equals("b")){
+                    return null;
+                } else if(containsGeneral(typeList, input)) {
+                    for (int i = 0; i < typeList.size(); i++) {
+                        if (getNameGeneral(typeList.get(i)).equals(input)) {
+                            return typeList.get(i);
+                        }
+                    }
+                } else{
+                    System.out.println(ANSI_RED + "No object of type " + type + " named \"" + input + "\" created yet" + ANSI_RESET);
+                }
+            }
+        }
+    }
+
 
     public void waitForCommand(){
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
@@ -56,7 +239,6 @@ public class TreeMain {
                     Tree A = readTree(reader);
                     if (A != null) {
                         trees.add(A);
-                        A.print();
                     }
                 } else if((comm.toLowerCase()).equals("automaton")) {
                     TreeAutomaton A = readAutomaton(reader);
@@ -107,10 +289,10 @@ public class TreeMain {
             while(true){
                 System.out.println(ANSI_GREEN + "Waiting on input..." + ANSI_RESET);
                 System.out.println(ANSI_GREEN + "Enter \"continue\" to finish definition." + ANSI_RESET);
-                String input = reader.readLine();
-                if((input.toLowerCase()).equals("continue")){
+                String input = reader.readLine().toLowerCase();
+                if(input.equals("continue")){
                     //dont accept alphabet unless it has a nullary element
-                    if(r.containsNullary() == true){
+                    if(r.containsNullary()){
                         System.out.println(ANSI_GREEN + "Alphabet input completed." + ANSI_RESET);
                         System.out.println(ANSI_GREEN + "Returning to main menu..." + ANSI_RESET);
                         return r;
@@ -124,7 +306,7 @@ public class TreeMain {
 
                 String[] arr = input.split(" ", 0);
                 if(arr.length <= 1){
-                    System.out.println(ANSI_RED + "Not enough inputs" + ANSI_RESET);
+                    System.out.println(ANSI_RED + "Not enough inputs." + ANSI_RESET);
                     System.out.println(ANSI_GREEN + "Please enter elements of the form \"element arity\" to define the alphabet." + ANSI_RESET);
                     continue;
                 }
@@ -591,6 +773,40 @@ public class TreeMain {
     public Boolean automatonNameTaken(String name){
         for(int i = 0; i < automata.size(); i++){
             if(automata.get(i).getName().equals(name)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public String getNameGeneral(Object a){
+        if(a.getClass().getName().equals("RankedAlphabet")){
+            RankedAlphabet b = new RankedAlphabet();
+            try{
+                b = (RankedAlphabet) a;
+            } catch(ClassCastException e){}
+            return b.getName();
+        } else if(a.getClass().getName().equals("Tree")){
+            Tree b = new Tree();
+            try{
+                b = (Tree) a;
+            } catch(ClassCastException e){}
+            return b.getName();
+        } else if(a.getClass().getName().equals("TreeAutomaton")){
+            TreeAutomaton b = new TreeAutomaton();
+            try{
+                b = (TreeAutomaton) a;
+            } catch(ClassCastException e){}
+            return b.getName();
+        } else{
+            System.out.println(ANSI_RED + "Unexpected erroer getting general class name" + ANSI_RESET);
+            return null;
+        }
+    }
+
+    public Boolean containsGeneral(ArrayList a, String s){
+        for(int i = 0; i < a.size(); i++){
+            if(getNameGeneral(a.get(i)).equals(s)){
                 return true;
             }
         }
