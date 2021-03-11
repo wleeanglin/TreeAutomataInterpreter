@@ -171,11 +171,8 @@ public class GUI extends Application{
             } else if(!(treeList.getSelectionModel().getSelectedIndex() >= 0)){
                 ErrorGUI.display("No tree selected.");
             } else{
-                System.out.println(this.trees.get(0).getAlphabet().getName());
-                System.out.println(this.automata.size());
                 Tree t = this.trees.get(treeList.getSelectionModel().getSelectedIndex());
                 TreeAutomaton a = this.automata.get(automataList.getSelectionModel().getSelectedIndex());
-                System.out.println(t.getAlphabet().getName());
                 if(!t.getAlphabet().getName().equals(a.getAlphabet().getName())){
                     ErrorGUI.display("Automaton and tree defined using different ranked alphabets.");
                 } else{
