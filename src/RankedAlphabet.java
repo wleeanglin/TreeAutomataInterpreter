@@ -12,15 +12,19 @@ public class RankedAlphabet {
     private ArrayList alph;
     private ArrayList arity;
     private String name;
+    private Boolean complete;
 
     public RankedAlphabet(){
-
+        this.alph = new ArrayList();
+        this.arity = new ArrayList<>();
+        this.complete = false;
     }
 
     public RankedAlphabet(String s){
         this.name = s;
         this.alph = new ArrayList();
         this.arity = new ArrayList<>();
+        this.complete = false;
     }
 
     public void add(String s, int arity){
@@ -37,8 +41,24 @@ public class RankedAlphabet {
         return (int) this.arity.get(i);
     }
 
+    public ArrayList getArityArray(){
+        return this.arity;
+    }
+
+    public void setName(String s){
+        this.name = s;
+    }
+
     public String getName(){
         return this.name;
+    }
+
+    public void setComplete(Boolean complete){
+        this.complete = complete;
+    }
+
+    public Boolean getComplete(){
+        return this.complete;
     }
 
     public ArrayList getAlph() {
@@ -121,4 +141,56 @@ public class RankedAlphabet {
             }
         }
     }
+
+    public Boolean checkInput(String element, String arity, StringBuffer errbuff){
+        String[] elementArr = element.split(" ", 0);
+        String[] arityArr = element.split(" ", 0);
+
+        if(elementArr.length > 1){
+            errbuff.append("Too many arguments for element.");
+            return false;
+        } else if(arityArr.length > 1){
+            errbuff.append("Too many arguments for arity.");
+            return false;
+        }
+
+        if(getAlph().contains(element.replaceAll("\\s+", ""))){
+            errbuff.append("Element already defined.");
+            return false;
+        }
+
+        //parse int
+        int i;
+        try{
+            i = Integer.parseInt(arity);
+        } catch (NumberFormatException e){
+            errbuff.append("Arity not an integer");
+            return false;
+        }
+        //Check int
+        if(i < 0){
+            errbuff.append("Negative Arity");
+            return false;
+        }
+        return true;
+    }
+
+    public void printAlphabet(){
+        for(int i = 0; i < this.getAlph().size(); i++){
+            System.out.println("Element " + (i + 1)  + "; " + this.getAlph().get(i) + " " + this.getArityArray().get(i));
+        }
+    }
+
+    //Only call when object is known :)
+    public int getIndex(String s){
+        for(int i = 0; i < this.getAlph().size(); i++){
+            if(this.getAlph().get(i).equals(s)){
+                return i;
+            }
+        }
+        return -1;
+    }
+
+
+
 }

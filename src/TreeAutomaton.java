@@ -2,6 +2,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.lang.StringBuilder;
 
 public class TreeAutomaton {
     public static final String ANSI_RESET = "\u001B[0m";
@@ -21,8 +22,13 @@ public class TreeAutomaton {
     private ArrayList<TransitionRule> rules;
     private String name;
 
-    public TreeAutomaton(){
+    //for GUI
+    private Boolean complete = false;
 
+    public TreeAutomaton(){
+        this.rules = new ArrayList<>();
+        this.states = new ArrayList<>();
+        this.finStates = new ArrayList<>();
     }
 
     public TreeAutomaton(String s, RankedAlphabet a){
@@ -37,6 +43,10 @@ public class TreeAutomaton {
         return this.name;
     }
 
+    public void setName(String s){
+        this.name = s;
+    }
+
     public ArrayList<String> getStates(){
         return this.states;
     }
@@ -47,6 +57,10 @@ public class TreeAutomaton {
 
     public RankedAlphabet getAlphabet(){
         return this.alphabet;
+    }
+
+    public void setAlphabet(RankedAlphabet a){
+        this.alphabet = a;
     }
 
     public void addRule(TransitionRule r){
@@ -61,8 +75,19 @@ public class TreeAutomaton {
         }
     }
 
+    public void removeRule(TransitionRule r){
+        //Maybe do states too?
+        rules.remove(r);
+    }
+
     public void addFinalState(String s){
         this.finStates.add(s);
+    }
+
+    public void removeFinalState(String s){
+        if(this.finStates.contains(s)){
+            this.finStates.remove(s);
+        }
     }
 
     public Boolean checkDuplicateRule(String element, ArrayList<String> states){
@@ -106,7 +131,6 @@ public class TreeAutomaton {
     }
 
     public void printRules(){
-
         for(int i = 0; i < rules.size(); i++){
             //Rule 1 = index 0
             System.out.printf(ANSI_YELLOW);
@@ -126,7 +150,29 @@ public class TreeAutomaton {
             System.out.printf("%s\n", rules.get(i).getNewState());
             System.out.printf(ANSI_RESET);
         }
+    }
 
+    public ArrayList<String> printRulesGUI(){
+        ArrayList<String> rulesList = new ArrayList<>();
+        StringBuilder b = new StringBuilder();
+        for(int i = 0; i < rules.size(); i++){
+            b.setLength(0);
+            b.append(rules.get(i).getElement());
+            b.append("(");
+            int j = 0;
+            //(q1 q2 q3)
+            for(; j < rules.get(i).getCurrentStates().size() - 1; j++){
+                b.append(rules.get(i).getCurrentStates().get(j));
+                b.append(" ");
+            }
+            if(rules.get(i).getCurrentStates().size() > 0){
+                b.append(rules.get(i).getCurrentStates().get(j));
+            }
+            b.append(") -> ");
+            b.append(rules.get(i).getNewState());
+            rulesList.add(b.toString());
+        }
+        return rulesList;
     }
 
     public ArrayList<Tree> operateAutomata(Tree t, StringBuffer errbuf){
@@ -398,6 +444,14 @@ public class TreeAutomaton {
         current.setCurrentStates(currentStates);
         current.setNewState(newState);
         return current;
+    }
+
+    public void setComplete(Boolean a){
+        this.complete = a;
+    }
+
+    public Boolean getComplete(){
+        return this.complete;
     }
 
 }

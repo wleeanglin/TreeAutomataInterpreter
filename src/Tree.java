@@ -15,6 +15,11 @@ public class Tree {
     private String name;
     private RankedAlphabet alphabet;
 
+    //For building tree;
+    private Node currentNode;
+    private ArrayList<Node> toComplete;
+    private Boolean complete = false;
+
     public Tree(){
 
     }
@@ -23,6 +28,12 @@ public class Tree {
         this.root = new Node(data, i, null);
         this.root.setHeight(1);
         this.name = s;
+        this.alphabet = a;
+    }
+
+    public void instansiate(String data, int i, RankedAlphabet a){
+        this.root = new Node(data, i, null);
+        this.root.setHeight(1);
         this.alphabet = a;
     }
 
@@ -42,6 +53,22 @@ public class Tree {
 
     public String getName(){
         return this.name;
+    }
+
+    public void setName(String s){
+        this.name = s;
+    }
+
+    public void setAlphabet(RankedAlphabet a){
+        this.alphabet = a;
+    }
+
+    public Boolean getComplete(){
+        return this.complete;
+    }
+
+    public void setComplete(Boolean b){
+        this.complete = b;
     }
 
     public int getMaxHeight(){
@@ -74,8 +101,10 @@ public class Tree {
         return this.alphabet;
     }
 
+    public String guiPrint(){return traversePreOrder(this.root, true);}
+
     public void print(){
-        System.out.println(traversePreOrder(this.root));
+        System.out.println(traversePreOrder(this.root, false));
     }
 
     public ArrayList<ArrayList<Node>> convert(){
@@ -97,16 +126,20 @@ public class Tree {
         return levels;
     }
 
-    private String traversePreOrder(Node root){
+    private String traversePreOrder(Node root, Boolean guiFlag){
         if(root == null){
             return "";
         }
 
         StringBuilder s = new StringBuilder();
-        if(root.getState()){
-            s.append(ANSI_RED + root.getData() + ANSI_RESET);
+        if (guiFlag) {
+            s.append(root.getData());
         } else{
-            s.append(ANSI_CYAN + root.getData() + ANSI_RESET);
+            if(root.getState()){
+                s.append(ANSI_RED + root.getData() + ANSI_RESET);
+            } else{
+                s.append(ANSI_CYAN + root.getData() + ANSI_RESET);
+            }
         }
 
         ArrayList<Node> children = root.getChildren();
@@ -115,24 +148,28 @@ public class Tree {
 
         for(int i = 0; i < children.size(); i++){
             if(i != children.size() - 1){
-                traverseNodes(s, "", pointerForOthers, children.get(i), children.size() > 1);
+                traverseNodes(s, "", pointerForOthers, children.get(i), children.size() > 1, guiFlag);
             } else {
-                traverseNodes(s, "", pointerForRightmost, children.get(i), false);
+                traverseNodes(s, "", pointerForRightmost, children.get(i), false, guiFlag);
             }
         }
 
         return s.toString();
     }
 
-    private void traverseNodes(StringBuilder s, String padding, String pointer, Node node, boolean hasSibling){
+    private void traverseNodes(StringBuilder s, String padding, String pointer, Node node, boolean hasSibling, boolean guiFlag){
         if (node != null) {
             s.append("\n");
             s.append(padding);
             s.append(pointer);
-            if(node.getState()){
-                s.append(ANSI_RED + node.getData() + ANSI_RESET);
+            if(guiFlag){
+                s.append(node.getData());
             } else{
-                s.append(ANSI_CYAN + node.getData() + ANSI_RESET);
+                if(node.getState()){
+                    s.append(ANSI_RED + node.getData() + ANSI_RESET);
+                } else{
+                    s.append(ANSI_CYAN + node.getData() + ANSI_RESET);
+                }
             }
 
             StringBuilder paddingBuilder = new StringBuilder(padding);
@@ -150,9 +187,48 @@ public class Tree {
 
             for(int i = 0; i < children.size(); i++){
                 if(i != children.size() - 1){
-                    traverseNodes(s, paddingForBoth, pointerForOthers, children.get(i), children.size() > 1);
+                    traverseNodes(s, paddingForBoth, pointerForOthers, children.get(i), children.size() > 1, guiFlag);
                 } else {
-                    traverseNodes(s, paddingForBoth, pointerForRightmost, children.get(i), false);
+                    traverseNodes(s, paddingForBoth, pointerForRightmost, children.get(i), false, guiFlag);
+                }
+            }
+        }
+    }
+
+    public void addNextNode(String s, int arity){
+        if(this.root == null){
+            this.root = new Node(s, arity, null);
+            this.root.setHeight(1);
+            this.currentNode = this.root;
+            this.toComplete = new ArrayList<>();
+            toComplete.add(currentNode);
+        } else{
+            while(true){
+                if(currentNode.getChildren().size() < currentNode.getNumChildren()){
+                    Node newNode = currentNode.addChild(s, arity);
+                    newNode.setHeight(this.currentNode.getHeight() + 1);
+                    toComplete.add(newNode);
+                    break;
+                } else{
+                    toComplete.remove(this.currentNode);
+                    if(toComplete.size() > 0){
+                        this.currentNode = toComplete.get(0);
+                    } else{
+                        this.complete = true;
+                        break;
+                    }
+                }
+            }
+        }
+
+        //maybe could be done more gracefully
+        if(toComplete.size() == 0){
+            this.complete = true;
+        } else{
+            this.complete = true;
+            for(int i = 0; i < toComplete.size(); i++){
+                if(toComplete.get(i).getChildren().size() < toComplete.get(i).getNumChildren()){
+                    this.complete = false;
                 }
             }
         }

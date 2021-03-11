@@ -35,19 +35,33 @@ public class TreeMain {
     }
 
     public void start(){
-        this.alphabets = new ArrayList<>();
-        this.trees = new ArrayList<>();
-        this.automata = new ArrayList<>();
-        this.histories = new ArrayList<>();
+        //in case needed
+        String[] args = {};
         try{
-            mainMenu();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+            while(true){
+                System.out.println(ANSI_GREEN + "[g]ui or [c]onsole" + ANSI_RESET);
+                String input = reader.readLine();
+                if(input.toLowerCase().equals("g") || input.toLowerCase().equals("gui")){
+                    GUI.main(args);
+                    System.exit(0);
+                } else if(input.toLowerCase().equals("c") || input.toLowerCase().equals("console")){
+                    this.alphabets = new ArrayList<>();
+                    this.trees = new ArrayList<>();
+                    this.automata = new ArrayList<>();
+                    this.histories = new ArrayList<>();
+                    mainMenu(reader);
+                    System.exit(0);
+                } else{
+                    System.out.println(ANSI_RED + "Command not recognized" + ANSI_RESET);
+                    continue;
+                }
+            }
         } catch(IOException e){}
         //waitForCommand();
     }
 
-    public void mainMenu() throws IOException{
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-
+    public void mainMenu(BufferedReader reader) throws IOException{
         while(true){
             printHeader("MAIN MENU");
             printOptions(baseOptions);
