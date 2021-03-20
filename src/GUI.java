@@ -42,12 +42,18 @@ public class GUI extends Application{
         this.automata = new ArrayList<>();
         this.histories = new ArrayList<>();
         this.u = new Utility();
+        ArrayList<RankedAlphabet> exampleAlphs = u.getExampleAlphabets();
+        this.alphabets.addAll(exampleAlphs);
+        ArrayList<Tree> exampleTrees = u.getExampleTrees(this.alphabets);
+        this.trees.addAll(exampleTrees);
+        ArrayList<TreeAutomaton> exampleAutomata = u.getAutomataExamples(this.alphabets);
+        this.automata.addAll(exampleAutomata);
         mainMenu(primaryStage);
     }
 
     public void mainMenu(Stage primaryStage){
         window = primaryStage;
-        Button newButton, modifyButton, operateButton, saveButton, loadButton, tutorialButton;
+        Button newButton, modifyButton, operateButton, tutorialButton;
 
         Label title = new Label("Main Menu");
         newButton = new Button("new");
@@ -59,17 +65,11 @@ public class GUI extends Application{
         operateButton = new Button("operate");
         operateButton.setOnAction(e -> operateMenu(window));
 
-        saveButton = new Button("save");
-        saveButton.setOnAction(e -> saveMenu(window));
-
-        loadButton = new Button("load");
-        loadButton.setOnAction(e -> loadMenu(window));
-
         tutorialButton = new Button("tutorial");
         tutorialButton.setOnAction(e -> tutorialMenu(window));
 
         VBox layout = new VBox(10);
-        layout.getChildren().addAll(title, newButton, modifyButton, operateButton, saveButton, loadButton, tutorialButton);
+        layout.getChildren().addAll(title, newButton, modifyButton, operateButton, tutorialButton);
         layout.setAlignment(Pos.CENTER);
         mainMenu = new Scene(layout, 400, 400);
 
@@ -130,10 +130,14 @@ public class GUI extends Application{
         //When modifying do this.setComplete(false);
         Label title = new Label("Modify");
         alphabetButton = new Button("alphabet");
-        alphabetButton.setOnAction(e -> System.out.println("Modify - Alphabet"));
+        alphabetButton.setOnAction(e -> {
+            ModifyAlphabetGUI.display(this.alphabets);
+        });
 
         automatonButton = new Button("automaton");
-        automatonButton.setOnAction(e -> System.out.println("Modify - Automaton"));
+        automatonButton.setOnAction(e -> {
+            ModifyAutomatonGUI.display(this.automata);
+        });
 
         backButton = new Button("back");
         backButton.setOnAction(e -> mainMenu(window));
@@ -152,8 +156,8 @@ public class GUI extends Application{
 
         ListView<String> automataList = new ListView<>();
         ListView<String> treeList = new ListView<>();
-        automataList.setPrefHeight(200); automataList.setPrefWidth(100);
-        treeList.setPrefHeight(200); treeList.setPrefWidth(100);
+        automataList.setPrefHeight(200); automataList.setPrefWidth(175);
+        treeList.setPrefHeight(200); treeList.setPrefWidth(175);
 
         ObservableList<String> automataListItems = FXCollections.observableArrayList(u.getAutomataNames(this.automata));
         ObservableList<String> treeListItems = FXCollections.observableArrayList(u.getTreeNames(this.trees));
@@ -177,7 +181,7 @@ public class GUI extends Application{
                     ErrorGUI.display("Automaton and tree defined using different ranked alphabets.");
                 } else{
                     StringBuffer errbuf = new StringBuffer();
-                    ArrayList<Tree> history = a.operateAutomata(t, errbuf);
+                    ArrayList<Tree> history = a.operateAutomata(t, errbuf, true);
                     historyDisplayGUI.display(history, errbuf.toString());
                 }
             }
@@ -204,23 +208,7 @@ public class GUI extends Application{
         window.setScene(operateMenu);
     }
 
-    public void saveMenu(Stage window){
-
-    }
-
-    public void loadMenu(Stage window){
-
-    }
-
     public void tutorialMenu(Stage window){
-
-    }
-
-    public void newAlphabet(Stage window){
-
-    }
-
-    public void newTree(){
 
     }
 

@@ -105,4 +105,109 @@ public class Utility {
         }
         return newArrayList;
     }
+
+    //DEFAULTS
+    public ArrayList<RankedAlphabet> getExampleAlphabets(){
+        ArrayList<RankedAlphabet> examples = new ArrayList<>();
+        RankedAlphabet one = new RankedAlphabet();
+        one.setName("ExampleAlphabet1");
+        one.add("a", 0);
+        one.add("b", 1);
+        one.add("c", 2);
+
+        RankedAlphabet two = new RankedAlphabet();
+        two.setName("ExampleAlphabet2");
+        two.add("nullary", 0);
+        two.add("unary", 1);
+        two.add("binary", 2);
+        two.add("(3)ary", 3);
+
+        examples.add(one);
+        examples.add(two);
+
+        return examples;
+    }
+
+    public ArrayList<Tree> getExampleTrees(ArrayList<RankedAlphabet> alphabets){
+        ArrayList<Tree> examples = new ArrayList<>();
+        RankedAlphabet one = alphabets.get(0);
+        RankedAlphabet two = alphabets.get(1);
+
+        Tree treeOne = new Tree();
+        treeOne.setName("ExampleTree1");
+        treeOne.setAlphabet(one);
+        treeOne.addNextNode((String) one.getAlph().get(2), 2);
+        treeOne.addNextNode((String) one.getAlph().get(2), 2);
+        treeOne.addNextNode((String) one.getAlph().get(1), 1);
+        treeOne.addNextNode((String) one.getAlph().get(1), 1);
+        treeOne.addNextNode((String) one.getAlph().get(0), 0);
+        treeOne.addNextNode((String) one.getAlph().get(0), 0);
+        treeOne.addNextNode((String) one.getAlph().get(0), 0);
+
+        Tree treeTwo = new Tree();
+        treeTwo.setName("ExampleTree2");
+        treeTwo.setAlphabet(two);
+        treeTwo.addNextNode((String) two.getAlph().get(3), 3);
+        treeTwo.addNextNode((String) two.getAlph().get(2), 2);
+        treeTwo.addNextNode((String) two.getAlph().get(1), 1);
+        treeTwo.addNextNode((String) two.getAlph().get(0), 0);
+        treeTwo.addNextNode((String) two.getAlph().get(0), 0);
+        treeTwo.addNextNode((String) two.getAlph().get(0), 0);
+        treeTwo.addNextNode((String) two.getAlph().get(0), 0);
+
+        examples.add(treeOne);
+        examples.add(treeTwo);
+
+        return examples;
+    }
+
+    public ArrayList<TreeAutomaton> getAutomataExamples(ArrayList<RankedAlphabet> alphabets){
+        ArrayList<TreeAutomaton> examples = new ArrayList<>();
+        RankedAlphabet one = alphabets.get(0);
+        RankedAlphabet two = alphabets.get(1);
+
+        ArrayList<String> emptyList = new ArrayList<>();
+
+        TreeAutomaton automatonOne = new TreeAutomaton("ExampleAutomaton1", one);
+        automatonOne.addRule(getRule((String) one.getAlph().get(0), 0, emptyList, "q1"));
+        ArrayList<String> r1 = new ArrayList<>();
+        r1.add("q1");
+        automatonOne.addRule(getRule((String) one.getAlph().get(1), 1, r1, "q2"));
+        ArrayList<String> r2 = new ArrayList<>();
+        r1.add("q2");
+        automatonOne.addRule(getRule((String) one.getAlph().get(1), 1, r2, "q2"));
+        ArrayList<String> r3 = new ArrayList<>();
+        r3.add("q1"); r3.add("q2");
+        automatonOne.addRule(getRule((String) one.getAlph().get(2), 2, r3, "q3"));
+        ArrayList<String> r4 = new ArrayList<>();
+        r4.add("q2"); r4.add("q3");
+        automatonOne.addRule(getRule((String) one.getAlph().get(2), 2, r4, "q4"));
+        automatonOne.addFinalState("q4");
+
+        TreeAutomaton automatonTwo = new TreeAutomaton("ExampleAutomaton2", two);
+        automatonTwo.addRule(getRule((String) two.getAlph().get(0), 0, emptyList,"state1"));
+        ArrayList<String> r5 = new ArrayList<>();
+        r5.add("state1");
+        automatonTwo.addRule(getRule((String) two.getAlph().get(1), 1, r5, "state2"));
+        ArrayList<String> r6 = new ArrayList<>();
+        r6.add("state1"); r6.add("state1");
+        automatonTwo.addRule(getRule((String) two.getAlph().get(2), 2, r6, "state3"));
+        ArrayList<String> r7 = new ArrayList<>();
+        r7.add("state1"); r7.add("state2"); r7.add("state3");
+        automatonTwo.addRule(getRule((String) two.getAlph().get(3), 3, r7, "state4"));
+        automatonTwo.addFinalState("state4");
+
+        examples.add(automatonOne);
+        examples.add(automatonTwo);
+
+        return examples;
+    }
+
+    public TransitionRule getRule(String name, int arity, ArrayList<String> current, String next){
+        TransitionRule r = new TransitionRule(name, arity);
+        r.setCurrentStates(current);
+        r.setNewState(next);
+        return r;
+    }
+
 }

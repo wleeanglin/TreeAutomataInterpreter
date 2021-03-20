@@ -93,7 +93,7 @@ public class NewTreeGUI {
 
         alphabetList = new ListView<String>();
         alphabetList.setPrefHeight(200);
-        alphabetList.setPrefWidth(100);
+        alphabetList.setPrefWidth(175);
         ObservableList<String> alphabetsDisplay = FXCollections.observableArrayList(u.getAlphabetNames(this.alphabets));
         alphabetList.setItems(alphabetsDisplay);
 
@@ -137,13 +137,15 @@ public class NewTreeGUI {
         ObservableList<String> newElements = FXCollections.observableArrayList(u.concatAlphArray(r.getAlph(), r.getArityArray()));
         elementList.setItems(newElements);
 
-        Text tree = new Text();
+        Label tree = new Label();
+        tree.setMinHeight(200);
+        tree.setMinWidth(200);
 
         addButton = new Button("add");
         addButton.setOnAction(e -> {
             if(!t.getComplete()){
                 t.addNextNode((String)r.getAlph().get(elementList.getSelectionModel().getSelectedIndex()), (int)r.getArityArray().get(elementList.getSelectionModel().getSelectedIndex()));
-                tree.setText(t.guiPrint());
+                tree.setText(t.getQuestionTree());
                 if(t.getComplete()){
                     addButton.setText("finish");
                 }
@@ -165,7 +167,7 @@ public class NewTreeGUI {
         row1.setAlignment(Pos.CENTER);
         row2.setAlignment(Pos.CENTER);
 
-        row1.getChildren().addAll(tree, elementList);
+        row1.getChildren().addAll(elementList, tree);
         row2.getChildren().addAll(addButton, cancelButton);
         vert.getChildren().addAll(row1, row2);
 

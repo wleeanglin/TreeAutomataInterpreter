@@ -175,7 +175,7 @@ public class TreeAutomaton {
         return rulesList;
     }
 
-    public ArrayList<Tree> operateAutomata(Tree t, StringBuffer errbuf){
+    public ArrayList<Tree> operateAutomata(Tree t, StringBuffer errbuf, Boolean guiFlag){
         ArrayList<Tree> history = new ArrayList<>();
         history.add(t);
 
@@ -190,14 +190,22 @@ public class TreeAutomaton {
                 h--;
                 if(h < 0) {
                     if(this.getFinStates().contains(b.getRoot().getData())){
-                        errbuf.append(ANSI_GREEN + "Tree '" + b.getName() + "' with final state '" + b.getRoot().getData() + "'" + ANSI_CYAN + " ACCEPTED " + ANSI_GREEN + "by automaton '" + this.getName() + "'.\n" + ANSI_RESET);
+                        if(!guiFlag){
+                            errbuf.append(ANSI_GREEN + "Tree '" + b.getName() + "' with final state '" + b.getRoot().getData() + "'" + ANSI_CYAN + " ACCEPTED " + ANSI_GREEN + "by automaton '" + this.getName() + "'.\n" + ANSI_RESET);
+                        } else{
+                            errbuf.append("Tree '" + b.getName() + "' with final state '" + b.getRoot().getData() + "' ACCEPTED by automaton '" + this.getName() + "'.\n");
+                        }
                     } else{
-                        errbuf.append(ANSI_GREEN + "Tree '" + b.getName() + "' with final state '" + b.getRoot().getData() + "'" + ANSI_RED + " REJECTED " + ANSI_GREEN + "by automaton '" + this.getName() + "'.\n" + ANSI_RESET);
+                        if(!guiFlag){
+                            errbuf.append(ANSI_GREEN + "Tree '" + b.getName() + "' with final state '" + b.getRoot().getData() + "'" + ANSI_RED + " REJECTED " + ANSI_GREEN + "by automaton '" + this.getName() + "'.\n" + ANSI_RESET);
+                        } else{
+                            errbuf.append("Tree '" + b.getName() + "' with final state '" + b.getRoot().getData() + "' REJECTED by automaton '" + this.getName() + "'.\n");
+                        }
                     }
                     break;
                 }
             }
-            b = nextStep(b, levels, h, w, errbuf);
+            b = nextStep(b, levels, h, w, errbuf, guiFlag);
             w++;
             if(b != null){
                 history.add(b);
@@ -209,7 +217,7 @@ public class TreeAutomaton {
         return history;
     }
 
-    public Tree nextStep(Tree t, ArrayList<ArrayList<Tree.Node>> levels, int h, int w, StringBuffer errbuf){
+    public Tree nextStep(Tree t, ArrayList<ArrayList<Tree.Node>> levels, int h, int w, StringBuffer errbuf, Boolean guiFlag){
         Tree.Node n = levels.get(h).get(w);
         TransitionRule r = this.getRule(n.getData(), n.getChildrenAsString());
         if(r != null){
@@ -237,11 +245,19 @@ public class TreeAutomaton {
 
             n.setParent(newNode);
         } else {
-            errbuf.append(ANSI_RED + "No rule defined in automaton " + name + " for node " + n.getData() + " with children ");
+            if(!guiFlag){
+                errbuf.append(ANSI_RED);
+            }
+            errbuf.append("No rule defined in automaton " + name + " for node " + n.getData() + " with children ");
             for (int i = 0; i < n.getChildren().size() - 1; i++) {
                 errbuf.append(n.getChildren().get(i).getData() + ", ");
             }
-            errbuf.append(n.getChildren().get(n.getChildren().size() - 1).getData() + ".\n" + ANSI_RESET);
+            if(n.getChildren().size() > 0) {
+                errbuf.append(n.getChildren().get(n.getChildren().size() - 1).getData() + ".\n");
+            }
+            if(!guiFlag){
+                errbuf.append(ANSI_RESET);
+            }
             return null;
         }
 

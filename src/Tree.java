@@ -234,6 +234,32 @@ public class Tree {
         }
     }
 
+    public String getQuestionTree(){
+        String s;
+        if(currentNode.getChildren().size() < currentNode.getNumChildren()){
+            Node temp = currentNode.addChild("?", 0);
+            s = this.guiPrint();
+            currentNode.removeChild();
+        } else if(questionCheck() != -1){
+            Node n = toComplete.get(questionCheck());
+            Node temp = n.addChild("?", 0);
+            s = this.guiPrint();
+            n.removeChild();
+        } else{
+            s = this.guiPrint();
+        }
+        return s;
+    }
+
+    public int questionCheck(){
+        for(int i = 0; i < toComplete.size(); i++){
+            if(toComplete.get(i).getChildren().size() < toComplete.get(i).getNumChildren()){
+                return i;
+            }
+        }
+        return -1;
+    }
+
     public static class Node{
         private String data;
         private int numChildren;
@@ -262,6 +288,7 @@ public class Tree {
             }
         }
 
+        //Removes last added child
         public void removeChild(){
             if(children.size() > 0){
                 children.remove(children.get(children.size() - 1));
