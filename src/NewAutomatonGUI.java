@@ -1,10 +1,5 @@
-import com.sun.javafx.binding.Logging;
-import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.scene.text.Text;
 import javafx.stage.*;
 import javafx.scene.*;
 import javafx.scene.layout.*;
@@ -12,7 +7,6 @@ import javafx.scene.control.*;
 import javafx.geometry.*;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class NewAutomatonGUI {
     private ArrayList<RankedAlphabet> alphabets;
@@ -35,7 +29,7 @@ public class NewAutomatonGUI {
 
         Stage window = new Stage();
 
-        window.initModality(Modality.APPLICATION_MODAL);
+        //window.initModality(Modality.APPLICATION_MODAL);
 
         getName(window);
     }
@@ -45,7 +39,7 @@ public class NewAutomatonGUI {
         final TextField nameBox;
 
         Label newAlphabet = new Label("New Automaton");
-        Label enterName = new Label("Enter name;");
+        Label enterName = new Label("Enter name -");
 
         nameBox = new TextField();
 
@@ -86,17 +80,24 @@ public class NewAutomatonGUI {
     }
 
     public void getAlphabetName(Stage window){
-        Button cancelButton, continueButton;
+        Button cancelButton, continueButton, showInfo;
 
         ListView<String> alphabetList;
 
         Label selectAlphabet = new Label("Select Alphabet");
 
-        alphabetList = new ListView<String>();
+        alphabetList = new ListView<>();
         alphabetList.setPrefHeight(200);
-        alphabetList.setPrefWidth(100);
+        alphabetList.setPrefWidth(175);
         ObservableList<String> alphabetsDisplay = FXCollections.observableArrayList(u.getAlphabetNames(this.alphabets));
         alphabetList.setItems(alphabetsDisplay);
+
+        showInfo = new Button("Show info");
+        showInfo.setOnAction(e -> {
+            if(alphabetList.getSelectionModel().getSelectedIndex() >= 0){
+                objectInformationGUI.displayAlphabet(this.alphabets.get(alphabetList.getSelectionModel().getSelectedIndex()));
+            }
+        });
 
         cancelButton = new Button("cancel");
         cancelButton.setOnAction(e -> window.close());
@@ -121,7 +122,7 @@ public class NewAutomatonGUI {
         row2.setAlignment(Pos.CENTER);
 
         row1.getChildren().addAll(selectAlphabet);
-        buttons.getChildren().addAll(continueButton, cancelButton);
+        buttons.getChildren().addAll(showInfo, continueButton, cancelButton);
         row2.getChildren().addAll(buttons, alphabetList);
         vert.getChildren().addAll(row1, row2);
 
@@ -139,11 +140,17 @@ public class NewAutomatonGUI {
         ruleList.setPrefWidth(200);
 
         element = new Label("Element -");
+        element.setPrefHeight(20);
         currentStates = new Label("Current States -");
+        currentStates.setPrefHeight(20);
         newState = new Label("New State -");
+        newState.setPrefHeight(20);
         elementBox = new TextField();
+        elementBox.setPrefHeight(20);
         currentStatesBox = new TextField();
+        currentStatesBox.setPrefHeight(20);
         newStateBox = new TextField();
+        newStateBox.setPrefHeight(20);
 
         addRule = new Button("add");
         addRule.setOnAction(e ->{

@@ -1,9 +1,3 @@
-import com.sun.javafx.binding.Logging;
-import javafx.beans.Observable;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.text.Text;
 import javafx.stage.*;
 import javafx.scene.*;
@@ -12,9 +6,7 @@ import javafx.scene.control.*;
 import javafx.geometry.*;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-
-public class historyDisplayGUI {
+public class historyDisplayGUI{
     private ArrayList<Tree> history;
     private String errbuf;
 
@@ -28,8 +20,6 @@ public class historyDisplayGUI {
         this.errbuf = errbuf;
 
         Stage window = new Stage();
-
-        window.initModality(Modality.APPLICATION_MODAL);
 
         Button stepForward, stepBackward, fullForward, fullBackward, quit;
         Text tree = new Text();
@@ -78,12 +68,18 @@ public class historyDisplayGUI {
         fullForward.setOnAction(e -> {
             counter[0] = (history.size() - 1);
             tree.setText(history.get(counter[0]).guiPrint());
+            status.setText("Step " + (counter[0] + 1)+ "/" + history.size() + "\n" + "Operation finished with message; " + errbuf);
         });
 
         fullBackward = new Button("<<");
         fullBackward.setOnAction(e -> {
             counter[0] = 0;
             tree.setText(history.get(counter[0]).guiPrint());
+            if(history.size() > 1){
+                status.setText("Step " + 1 + "/" + history.size());
+            } else{
+                status.setText("Step 1/1\nOperation finished with message " + errbuf);
+            }
         });
 
         quit = new Button("quit");

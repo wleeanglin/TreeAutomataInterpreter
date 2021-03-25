@@ -114,6 +114,7 @@ public class Utility {
         one.add("a", 0);
         one.add("b", 1);
         one.add("c", 2);
+        one.setModifiable(false);
 
         RankedAlphabet two = new RankedAlphabet();
         two.setName("ExampleAlphabet2");
@@ -121,6 +122,7 @@ public class Utility {
         two.add("unary", 1);
         two.add("binary", 2);
         two.add("(3)ary", 3);
+        two.setModifiable(false);
 
         examples.add(one);
         examples.add(two);
@@ -174,7 +176,7 @@ public class Utility {
         r1.add("q1");
         automatonOne.addRule(getRule((String) one.getAlph().get(1), 1, r1, "q2"));
         ArrayList<String> r2 = new ArrayList<>();
-        r1.add("q2");
+        r2.add("q2");
         automatonOne.addRule(getRule((String) one.getAlph().get(1), 1, r2, "q2"));
         ArrayList<String> r3 = new ArrayList<>();
         r3.add("q1"); r3.add("q2");
@@ -183,6 +185,7 @@ public class Utility {
         r4.add("q2"); r4.add("q3");
         automatonOne.addRule(getRule((String) one.getAlph().get(2), 2, r4, "q4"));
         automatonOne.addFinalState("q4");
+        automatonOne.setModifiable(false);
 
         TreeAutomaton automatonTwo = new TreeAutomaton("ExampleAutomaton2", two);
         automatonTwo.addRule(getRule((String) two.getAlph().get(0), 0, emptyList,"state1"));
@@ -196,6 +199,7 @@ public class Utility {
         r7.add("state1"); r7.add("state2"); r7.add("state3");
         automatonTwo.addRule(getRule((String) two.getAlph().get(3), 3, r7, "state4"));
         automatonTwo.addFinalState("state4");
+        automatonTwo.setModifiable(false);
 
         examples.add(automatonOne);
         examples.add(automatonTwo);

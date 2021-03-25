@@ -1,9 +1,5 @@
-import com.sun.javafx.binding.Logging;
-import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.stage.*;
 import javafx.scene.*;
 import javafx.scene.layout.*;
@@ -33,7 +29,7 @@ public class NewAlphabetGUI {
 
         Stage window = new Stage();
         //Have to deal with this before closing the window
-        window.initModality(Modality.APPLICATION_MODAL);
+        //window.initModality(Modality.APPLICATION_MODAL);
 
         getName(window);
     }
@@ -47,9 +43,11 @@ public class NewAlphabetGUI {
         final TextField nameBox;
 
         Label newAlphabet = new Label("New Alphabet");
-        Label enterName = new Label("Enter name;");
+        Label enterName = new Label("Enter name -");
+        enterName.setPrefHeight(20);
 
         nameBox = new TextField();
+        nameBox.setPrefHeight(20);
 
         cancelButton = new Button("cancel");
         cancelButton.setOnAction(e -> window.close());
@@ -96,12 +94,16 @@ public class NewAlphabetGUI {
         final TextField elementBox, arityBox;
         ListView<String> elementList;
 
-        Label elementLabel = new Label("Element;");
-        Label arityLabel = new Label("Arity;");
+        Label elementLabel = new Label("Element -");
+        Label arityLabel = new Label("Arity -");
+        elementLabel.setPrefHeight(20);
+        arityLabel.setPrefHeight(20);
         elementBox = new TextField();
         arityBox = new TextField();
+        elementBox.setPrefHeight(20);
+        arityBox.setPrefHeight(20);
 
-        elementList = new ListView<String>();
+        elementList = new ListView<>();
         elementList.setPrefHeight(200);
         elementList.setPrefWidth(100);
 
@@ -148,12 +150,27 @@ public class NewAlphabetGUI {
             elementList.setItems(newElements);
         });
 
-        VBox inputVert = new VBox(10);
-        HBox inputRow1 = new HBox(10);
-        HBox inputRow2 = new HBox(10);
-        inputVert.setAlignment(Pos.CENTER);
-        inputRow1.setAlignment(Pos.CENTER);
-        inputRow2.setAlignment(Pos.CENTER);
+        HBox inputHor = new HBox(10);
+        VBox inputVertl = new VBox(10);
+        VBox inputVertr = new VBox(10);
+        HBox ivlr1 = new HBox(10);
+        HBox ivlr2 = new HBox(10);
+        HBox ivrr1 = new HBox(10);
+        HBox ivrr2 = new HBox(10);
+
+        inputHor.setAlignment(Pos.CENTER);
+        inputVertl.setAlignment(Pos.CENTER_RIGHT);
+        inputVertr.setAlignment(Pos.CENTER_LEFT);
+
+        ivlr1.getChildren().add(elementLabel);
+        ivlr2.getChildren().add(arityLabel);
+        ivrr1.getChildren().add(elementBox);
+        ivrr2.getChildren().add(arityBox);
+
+        inputVertl.getChildren().addAll(ivlr1, ivlr2);
+        inputVertr.getChildren().addAll(ivrr1, ivrr2);
+
+        inputHor.getChildren().addAll(inputVertl, inputVertr);
 
         VBox vert = new VBox(10);
         HBox row1 = new HBox(10);
@@ -165,11 +182,7 @@ public class NewAlphabetGUI {
         row2.setAlignment(Pos.CENTER);
         row3.setAlignment(Pos.CENTER);
 
-        inputRow1.getChildren().addAll(elementLabel, elementBox);
-        inputRow2.getChildren().addAll(arityLabel, arityBox);
-        inputVert.getChildren().addAll(inputRow1, inputRow2);
-
-        row1.getChildren().addAll(inputVert, elementList);
+        row1.getChildren().addAll(inputHor, elementList);
 
         row2.getChildren().addAll(addButton, removeButton);
         row3.getChildren().addAll(finishButton, cancelButton);

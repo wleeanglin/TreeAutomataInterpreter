@@ -1,10 +1,5 @@
-import com.sun.javafx.binding.Logging;
-import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.scene.text.Text;
 import javafx.stage.*;
 import javafx.scene.*;
 import javafx.scene.layout.*;
@@ -34,7 +29,7 @@ public class NewTreeGUI {
 
         Stage window = new Stage();
 
-        window.initModality(Modality.APPLICATION_MODAL);
+        //window.initModality(Modality.APPLICATION_MODAL);
 
         getName(window);
     }
@@ -44,7 +39,7 @@ public class NewTreeGUI {
         final TextField nameBox;
 
         Label newAlphabet = new Label("New Tree");
-        Label enterName = new Label("Enter name;");
+        Label enterName = new Label("Enter name -");
 
         nameBox = new TextField();
 
@@ -85,17 +80,24 @@ public class NewTreeGUI {
     }
 
     public void getAlphabetName(Stage window){
-        Button cancelButton, continueButton;
+        Button cancelButton, continueButton, showInfo;
 
         ListView<String> alphabetList;
 
         Label selectAlphabet = new Label("Select Alphabet");
 
-        alphabetList = new ListView<String>();
+        alphabetList = new ListView<>();
         alphabetList.setPrefHeight(200);
         alphabetList.setPrefWidth(175);
         ObservableList<String> alphabetsDisplay = FXCollections.observableArrayList(u.getAlphabetNames(this.alphabets));
         alphabetList.setItems(alphabetsDisplay);
+
+        showInfo = new Button("Show info");
+        showInfo.setOnAction(e -> {
+            if(alphabetList.getSelectionModel().getSelectedIndex() >= 0){
+                objectInformationGUI.displayAlphabet(this.alphabets.get(alphabetList.getSelectionModel().getSelectedIndex()));
+            }
+        });
 
         cancelButton = new Button("cancel");
         cancelButton.setOnAction(e -> window.close());
@@ -120,7 +122,7 @@ public class NewTreeGUI {
         row2.setAlignment(Pos.CENTER);
 
         row1.getChildren().addAll(selectAlphabet);
-        buttons.getChildren().addAll(continueButton, cancelButton);
+        buttons.getChildren().addAll(showInfo, continueButton, cancelButton);
         row2.getChildren().addAll(buttons, alphabetList);
         vert.getChildren().addAll(row1, row2);
 
@@ -131,7 +133,7 @@ public class NewTreeGUI {
     public void buildTree(Stage window){
         Button addButton, cancelButton;
 
-        ListView<String> elementList = new ListView<String>();
+        ListView<String> elementList = new ListView<>();
         elementList.setPrefHeight(200);
         elementList.setPrefWidth(100);
         ObservableList<String> newElements = FXCollections.observableArrayList(u.concatAlphArray(r.getAlph(), r.getArityArray()));

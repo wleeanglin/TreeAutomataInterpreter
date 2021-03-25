@@ -13,6 +13,7 @@ public class RankedAlphabet {
     private ArrayList arity;
     private String name;
     private Boolean complete;
+    private Boolean modifiable = true;
 
     public RankedAlphabet(){
         this.alph = new ArrayList();
@@ -59,6 +60,14 @@ public class RankedAlphabet {
 
     public Boolean getComplete(){
         return this.complete;
+    }
+
+    public void setModifiable(Boolean b){
+        this.modifiable = b;
+    }
+
+    public Boolean getModifiable(){
+        return this.modifiable;
     }
 
     public ArrayList getAlph() {

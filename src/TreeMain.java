@@ -35,7 +35,9 @@ public class TreeMain {
                     continue;
                 }
             }
-        } catch(IOException e){}
+        } catch(IOException e){
+            System.out.println(e);
+        }
         //waitForCommand();
     }
 }

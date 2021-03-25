@@ -51,8 +51,12 @@ public class ModifyAlphabetGUI {
         continueButton = new Button("continue");
         continueButton.setOnAction(e -> {
             if(alphabetList.getSelectionModel().getSelectedIndex() >= 0){
-                this.r = this.alphabets.get(alphabetList.getSelectionModel().getSelectedIndex());
-                modifyAlphabet(window);
+                if(this.alphabets.get(alphabetList.getSelectionModel().getSelectedIndex()).getModifiable()){
+                    this.r = this.alphabets.get(alphabetList.getSelectionModel().getSelectedIndex());
+                    modifyAlphabet(window);
+                } else{
+                    ErrorGUI.display("Example alphabets/automata not modifiable");
+                }
             }
         });
 
@@ -84,12 +88,12 @@ public class ModifyAlphabetGUI {
         final TextField elementBox, arityBox;
         ListView<String> elementList;
 
-        Label elementLabel = new Label("Element;");
-        Label arityLabel = new Label("Arity;");
+        Label elementLabel = new Label("Element -");
+        Label arityLabel = new Label("Arity -");
         elementBox = new TextField();
         arityBox = new TextField();
 
-        elementList = new ListView<String>();
+        elementList = new ListView<>();
         elementList.setPrefHeight(200);
         elementList.setPrefWidth(100);
         ObservableList<String> el = FXCollections.observableArrayList(u.concatAlphArray(r.getAlph(), r.getArityArray()));
@@ -138,12 +142,27 @@ public class ModifyAlphabetGUI {
             elementList.setItems(newElements);
         });
 
-        VBox inputVert = new VBox(10);
-        HBox inputRow1 = new HBox(10);
-        HBox inputRow2 = new HBox(10);
-        inputVert.setAlignment(Pos.CENTER);
-        inputRow1.setAlignment(Pos.CENTER);
-        inputRow2.setAlignment(Pos.CENTER);
+        HBox inputHor = new HBox(10);
+        VBox inputVertl = new VBox(10);
+        VBox inputVertr = new VBox(10);
+        HBox ivlr1 = new HBox(10);
+        HBox ivlr2 = new HBox(10);
+        HBox ivrr1 = new HBox(10);
+        HBox ivrr2 = new HBox(10);
+
+        inputHor.setAlignment(Pos.CENTER);
+        inputVertl.setAlignment(Pos.CENTER_RIGHT);
+        inputVertr.setAlignment(Pos.CENTER_LEFT);
+
+        ivlr1.getChildren().add(elementLabel);
+        ivlr2.getChildren().add(arityLabel);
+        ivrr1.getChildren().add(elementBox);
+        ivrr2.getChildren().add(arityBox);
+
+        inputVertl.getChildren().addAll(ivlr1, ivlr2);
+        inputVertr.getChildren().addAll(ivrr1, ivrr2);
+
+        inputHor.getChildren().addAll(inputVertl, inputVertr);
 
         VBox vert = new VBox(10);
         HBox row1 = new HBox(10);
@@ -155,11 +174,7 @@ public class ModifyAlphabetGUI {
         row2.setAlignment(Pos.CENTER);
         row3.setAlignment(Pos.CENTER);
 
-        inputRow1.getChildren().addAll(elementLabel, elementBox);
-        inputRow2.getChildren().addAll(arityLabel, arityBox);
-        inputVert.getChildren().addAll(inputRow1, inputRow2);
-
-        row1.getChildren().addAll(inputVert, elementList);
+        row1.getChildren().addAll(inputHor, elementList);
 
         row2.getChildren().addAll(addButton, removeButton);
         row3.getChildren().addAll(finishButton, cancelButton);

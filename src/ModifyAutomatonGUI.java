@@ -40,7 +40,7 @@ public class ModifyAutomatonGUI {
 
         Label selectAlphabet = new Label("Select Automaton");
 
-        automatonList = new ListView<String>();
+        automatonList = new ListView<>();
         automatonList.setPrefHeight(200);
         automatonList.setPrefWidth(175);
         ObservableList<String> automatonDisplay = FXCollections.observableArrayList(u.getAutomataNames(this.automata));
@@ -52,9 +52,13 @@ public class ModifyAutomatonGUI {
         continueButton = new Button("continue");
         continueButton.setOnAction(e -> {
             if(automatonList.getSelectionModel().getSelectedIndex() >= 0){
-                this.t = this.automata.get(automatonList.getSelectionModel().getSelectedIndex());
-                this.r = this.t.getAlphabet();
-                modifyRules(window);
+                if(this.automata.get(automatonList.getSelectionModel().getSelectedIndex()).getModifiable()){
+                    this.t = this.automata.get(automatonList.getSelectionModel().getSelectedIndex());
+                    this.r = this.t.getAlphabet();
+                    modifyRules(window);
+                } else{
+                    ErrorGUI.display("Example alphabets/automata not modifiable");
+                }
             }
         });
 

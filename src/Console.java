@@ -147,7 +147,11 @@ public class Console {
                     try{
                         RankedAlphabet A = (RankedAlphabet) selectToModify("alphabet", this.alphabets, reader);
                         if(A != null){
-                            A.modify(reader);
+                            if(A.getModifiable()){
+                                A.modify(reader);
+                            } else{
+                                System.out.println(ANSI_RED + "Example alphabets/automata not modifiable" + ANSI_RESET);
+                            }
                         }
                     }
                     catch(ClassCastException e){}
@@ -156,7 +160,11 @@ public class Console {
                     try{
                         TreeAutomaton A = (TreeAutomaton) selectToModify("automaton", this.automata, reader);
                         if(A != null){
-                            A.modify(reader);
+                            if(A.getModifiable()){
+                                A.modify(reader);
+                            } else{
+                                System.out.println(ANSI_RED + "Example alphabets/automata not modifiable" + ANSI_RESET);
+                            }
                         }
                     }
                     catch(ClassCastException e){}
@@ -727,8 +735,11 @@ public class Console {
     }
 
     public void printHelp(){
-        System.out.println("********************");
-        System.out.println("Placeholder help Information");
-        System.out.println("********************");
+        System.out.printf(ANSI_GREEN);
+        System.out.println("new - Create a new object, alphabet, tree or automaton");
+        System.out.println("modify - Modify existing objects, alphabets or automata (trees not yet modifiable)");
+        System.out.println("operate - Test trees for acceptance with automata");
+        System.out.println("General information on tree automata and the operation process can be found in the GUI tutorial or doc");
+        System.out.printf(ANSI_RESET);
     }
 }

@@ -6,15 +6,10 @@ import java.lang.StringBuilder;
 
 public class TreeAutomaton {
     public static final String ANSI_RESET = "\u001B[0m";
-    public static final String ANSI_BLACK = "\u001B[30m";
     public static final String ANSI_RED = "\u001B[31m";
     public static final String ANSI_GREEN = "\u001B[32m";
     public static final String ANSI_YELLOW = "\u001B[33m";
-    public static final String ANSI_BLUE = "\u001B[34m";
-    public static final String ANSI_PURPLE = "\u001B[35m";
     public static final String ANSI_CYAN = "\u001B[36m";
-    public static final String ANSI_WHITE = "\u001B[37m";
-
 
     private ArrayList<String> states;
     private RankedAlphabet alphabet;
@@ -24,6 +19,7 @@ public class TreeAutomaton {
 
     //for GUI
     private Boolean complete = false;
+    private Boolean modifiable = true;
 
     public TreeAutomaton(){
         this.rules = new ArrayList<>();
@@ -62,6 +58,15 @@ public class TreeAutomaton {
     public void setAlphabet(RankedAlphabet a){
         this.alphabet = a;
     }
+
+    public void setModifiable(Boolean b){
+        this.modifiable = b;
+    }
+
+    public Boolean getModifiable(){
+        return this.modifiable;
+    }
+
 
     public void addRule(TransitionRule r){
         rules.add(r);

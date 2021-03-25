@@ -1,13 +1,13 @@
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.*;
 import javafx.scene.*;
 import javafx.scene.layout.*;
-import javafx.geometry.*;
 
 public class ErrorGUI {
-    static Stage window;
-    static Scene error;
+    private static Stage window;
+    private static Scene error;
 
     public static void display(String errorMessage){
         window = new Stage();
@@ -16,6 +16,7 @@ public class ErrorGUI {
         Label errorLabel = new Label(errorMessage);
         errorLabel.setWrapText(true);
         errorLabel.setAlignment(Pos.CENTER);
+        errorLabel.setTextAlignment(TextAlignment.CENTER);
 
         Button ok = new Button("OK");
         ok.setOnAction(e -> window.close());
