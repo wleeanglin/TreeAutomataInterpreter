@@ -48,8 +48,8 @@ public class NewAutomatonGUI {
 
         continueButton = new Button("continue");
         continueButton.setOnAction(e -> {
-            if(!nameBox.getText().equals("") && !u.automatonNameTaken(nameBox.getText().toLowerCase(), this.automata)){
-                t.setName(nameBox.getText().toLowerCase());
+            if(!nameBox.getText().equals("") && !u.automatonNameTaken(nameBox.getText(), this.automata)){
+                t.setName(nameBox.getText());
                 getAlphabetName(window);
             } else if(nameBox.getText().equals("")){
                 ErrorGUI.display("No input string entered for name. Please enter a valid string before continuing.");

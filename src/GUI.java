@@ -137,7 +137,7 @@ public class GUI extends Application{
         backButton = new Button("back");
         backButton.setOnAction(e -> mainMenu(window));
 
-        VBox layout = new VBox(20);
+        VBox layout = new VBox(10);
         layout.getChildren().addAll(title, alphabetButton, automatonButton, backButton);
         layout.setAlignment(Pos.CENTER);
         Scene modifyMenu = new Scene(layout, 400, 400);

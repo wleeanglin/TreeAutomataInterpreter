@@ -21,8 +21,8 @@ public class RankedAlphabet {
         this.complete = false;
     }
 
-    public RankedAlphabet(String s){
-        this.name = s;
+    public RankedAlphabet(String name){
+        this.name = name;
         this.alph = new ArrayList();
         this.arity = new ArrayList<>();
         this.complete = false;

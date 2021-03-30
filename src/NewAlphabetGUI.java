@@ -54,8 +54,8 @@ public class NewAlphabetGUI {
 
         continueButton = new Button("continue");
         continueButton.setOnAction(e -> {
-            if(!nameBox.getText().equals("") && !u.alphabetNameTaken(nameBox.getText().toLowerCase(), this.alphabets)){
-                r.setName(nameBox.getText().toLowerCase());
+            if(!nameBox.getText().equals("") && !u.alphabetNameTaken(nameBox.getText(), this.alphabets)){
+                r.setName(nameBox.getText());
                 getAlphabets(window);
             } else if(nameBox.getText().equals("")){
                 ErrorGUI.display("No input string entered for name. Please enter a valid string before continuing.");

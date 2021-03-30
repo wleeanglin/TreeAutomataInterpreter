@@ -257,7 +257,7 @@ public class Console {
             printSubHeader("Defining new Alphabet");
             System.out.println(ANSI_GREEN + "Please enter alphabet name;" + ANSI_RESET);
             while(true){
-                name = reader.readLine().toLowerCase();
+                name = reader.readLine();
                 if(u.alphabetNameTaken(name, this.alphabets)){
                     System.out.println(ANSI_RED + "There already exists an alphabet with the name " + name + "." + ANSI_RESET);
                     System.out.println(ANSI_GREEN + "Please choose another name;" + ANSI_RESET);
@@ -366,7 +366,7 @@ public class Console {
                 for(int i = 0; i < alphabets.size(); i++){
                     System.out.println(ANSI_CYAN + alphabets.get(i).getName() + ANSI_RESET);
                 }
-                alphabetName = reader.readLine().toLowerCase();
+                alphabetName = reader.readLine();
                 if(!u.alphabetNameTaken(alphabetName, this.alphabets)){
                     System.out.println(ANSI_RED + "Alphabet " + alphabetName + " not defined." + ANSI_RESET);
                     continue;
@@ -454,7 +454,7 @@ public class Console {
             String name;
             while (true) {
                 System.out.println(ANSI_GREEN + "Please enter automaton name;" + ANSI_RESET);
-                name = reader.readLine().toLowerCase();
+                name = reader.readLine();
                 if (u.automatonNameTaken(name, this.automata)) {
                     System.out.println(ANSI_RED + "There already exists an automaton with the name " + name + "." + ANSI_RESET);
                     continue;
@@ -471,7 +471,7 @@ public class Console {
                 for(int i = 0; i < alphabets.size(); i++){
                     System.out.println(ANSI_CYAN + alphabets.get(i).getName() + ANSI_RESET);
                 }
-                alphabetName = reader.readLine().toLowerCase();
+                alphabetName = reader.readLine();
                 if(!u.alphabetNameTaken(alphabetName, this.alphabets)){
                     System.out.println(ANSI_RED + "Alphabet " + alphabetName + " not defined." + ANSI_RESET);
                     continue;

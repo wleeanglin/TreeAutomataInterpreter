@@ -48,8 +48,8 @@ public class NewTreeGUI {
 
         continueButton = new Button("continue");
         continueButton.setOnAction(e -> {
-            if(!nameBox.getText().equals("") && !u.treeNameTaken(nameBox.getText().toLowerCase(), this.trees)){
-                t.setName(nameBox.getText().toLowerCase());
+            if(!nameBox.getText().equals("") && !u.treeNameTaken(nameBox.getText(), this.trees)){
+                t.setName(nameBox.getText());
                 getAlphabetName(window);
             } else if(nameBox.getText().equals("")){
                 ErrorGUI.display("No input string entered for name. Please enter a valid string before continuing.");

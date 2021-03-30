@@ -215,6 +215,11 @@ public class TreeAutomaton {
             if(b != null){
                 history.add(b);
             } else{
+                if(!guiFlag){
+                    errbuf.append(ANSI_GREEN + "Tree '" + t.getName() + "'" + ANSI_RED + " REJECTED" + ANSI_GREEN + " by automaton '" + this.getName() + "'.\n" + ANSI_RESET);
+                } else{
+                    errbuf.append("Tree  '" + t.getName() + "' REJECTED by automaton '" + this.getName() + "'.\n");
+                }
                 break;
             }
         }
