@@ -29,7 +29,7 @@ public class TreeAutomaton {
 
     public TreeAutomaton(String s, RankedAlphabet a){
         this.name = s;
-        this.alphabet = a;
+        this.alphabet = a.copy();
         this.rules = new ArrayList<>();
         this.states = new ArrayList<>();
         this.finStates = new ArrayList<>();
@@ -56,7 +56,7 @@ public class TreeAutomaton {
     }
 
     public void setAlphabet(RankedAlphabet a){
-        this.alphabet = a;
+        this.alphabet = a.copy();
     }
 
     public void setModifiable(Boolean b){

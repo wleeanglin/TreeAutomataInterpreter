@@ -200,6 +200,36 @@ public class RankedAlphabet {
         return -1;
     }
 
+    public Boolean compare(RankedAlphabet a){
+        if(!a.getName().equals(this.name)){
+            return false;
+        } else if(a.getAlph().size() != this.alph.size()){
+            return false;
+        } else if(a.getArityArray().size() != this.arity.size()){
+            return false;
+        } else{
+            for(int i = 0; i < a.getAlph().size(); i++){
+                if(!a.getAlph().get(i).equals(this.alph.get(i))){
+                    return false;
+                } else if(!a.getArityArray().get(i).equals(this.arity.get(i))){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public RankedAlphabet copy(){
+        RankedAlphabet b = new RankedAlphabet();
+        String s = this.getName();
+        b.setName(s);
+
+        for(int i = 0; i < this.getAlph().size(); i++){
+            b.add((String) this.getAlph().get(i), (int) this.getArityArray().get(i));
+        }
+
+        return b;
+    }
 
 
 }

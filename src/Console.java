@@ -682,7 +682,7 @@ public class Console {
                             t = trees.get(i);
                         }
                     }
-                    if(!(t.getAlphabet().getName().equals(a.getAlphabet().getName()))){
+                    if(!t.getAlphabet().compare(a.getAlphabet())){
                         System.out.println(ANSI_RED + "Tree " + input + " defined using a different ranked alphabet to automaton " + a + "." + ANSI_RESET);
                         System.out.println(ANSI_GREEN + "Both the tree and the automaton need to be defined using the same ranked alphabet for the transition rules to work." + ANSI_RESET);
                         continue;

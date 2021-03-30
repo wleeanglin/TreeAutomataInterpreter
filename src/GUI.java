@@ -188,7 +188,7 @@ public class GUI extends Application{
             } else{
                 Tree t = this.trees.get(treeList.getSelectionModel().getSelectedIndex());
                 TreeAutomaton a = this.automata.get(automataList.getSelectionModel().getSelectedIndex());
-                if(!t.getAlphabet().getName().equals(a.getAlphabet().getName())){
+                if(!t.getAlphabet().compare(a.getAlphabet())){
                     ErrorGUI.display("Automaton and tree defined using different ranked alphabets.");
                 } else{
                     StringBuffer errbuf = new StringBuffer();

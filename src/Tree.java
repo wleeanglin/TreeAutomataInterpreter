@@ -22,7 +22,7 @@ public class Tree {
         this.root = new Node(data, i, null);
         this.root.setHeight(1);
         this.name = s;
-        this.alphabet = a;
+        this.alphabet = a.copy();
         this.currentNode = this.root;
         this.toComplete = new ArrayList<>();
         toComplete.add(currentNode);
@@ -57,7 +57,7 @@ public class Tree {
     }
 
     public void setAlphabet(RankedAlphabet a){
-        this.alphabet = a;
+        this.alphabet = a.copy();
     }
 
     public Boolean getComplete(){
