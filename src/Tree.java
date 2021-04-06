@@ -28,12 +28,6 @@ public class Tree {
         toComplete.add(currentNode);
     }
 
-    public void instansiate(String data, int i, RankedAlphabet a){
-        this.root = new Node(data, i, null);
-        this.root.setHeight(1);
-        this.alphabet = a;
-    }
-
     public Tree copyTree(){
         Tree t = new Tree(this.name, this.root.getData(), this.root.getNumChildren(), this.alphabet);
         recursiveCopy(this.root, t.getRoot());

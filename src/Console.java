@@ -646,13 +646,13 @@ public class Console {
                     return;
                 }
 
-                if(!u.automatonNameTaken(input.toLowerCase(), this.automata)){
+                if(!u.automatonNameTaken(input, this.automata)){
                     System.out.println(ANSI_RED + "Automaton " + input + " not defined." + ANSI_RESET);
                     continue;
                 } else{
                     a = null;
                     for(int i = 0; i < automata.size(); i++){
-                        if(automata.get(i).getName().equals(input.toLowerCase())){
+                        if(automata.get(i).getName().equals(input)){
                             a = automata.get(i);
                         }
                     }
@@ -672,13 +672,13 @@ public class Console {
                     return;
                 }
 
-                if(!u.treeNameTaken(input.toLowerCase(), this.trees)){
+                if(!u.treeNameTaken(input, this.trees)){
                     System.out.println(ANSI_RED + "Tree " + input + " not defined." + ANSI_RESET);
                     continue;
                 } else{
                     t = null;
                     for(int i = 0; i < trees.size(); i++){
-                        if(trees.get(i).getName().equals(input.toLowerCase())){
+                        if(trees.get(i).getName().equals(input)){
                             t = trees.get(i);
                         }
                     }

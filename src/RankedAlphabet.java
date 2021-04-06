@@ -219,6 +219,9 @@ public class RankedAlphabet {
         return true;
     }
 
+    //Maybe implement a way of allowing edited alphabets with the same content to be seen as equal
+    //I.e. a 1, b 0 == b 0, a 1
+    //Collections.sort()?
     public RankedAlphabet copy(){
         RankedAlphabet b = new RankedAlphabet();
         String s = this.getName();
