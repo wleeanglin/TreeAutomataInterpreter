@@ -5,12 +5,9 @@ import java.util.ArrayList;
 
 public class Console {
     public static final String ANSI_RESET = "\u001B[0m";
-    public static final String ANSI_BLACK = "\u001B[30m";
     public static final String ANSI_RED = "\u001B[31m";
     public static final String ANSI_GREEN = "\u001B[32m";
     public static final String ANSI_YELLOW = "\u001B[33m";
-    public static final String ANSI_BLUE = "\u001B[34m";
-    public static final String ANSI_PURPLE = "\u001B[35m";
     public static final String ANSI_CYAN = "\u001B[36m";
     public static final String ANSI_WHITE = "\u001B[37m";
 
@@ -66,7 +63,6 @@ public class Console {
     }
 
     private void printHeader(String t){
-        //Fancy header :D
         int i = ((30 - t.length()) / 2) - 1;
         int j = (30 - (i + t.length())) - 2;
         System.out.println(ANSI_WHITE + "*============================*");
@@ -83,7 +79,7 @@ public class Console {
     }
 
     private void printSubHeader(String t){
-        //Fancy subheader D:
+        //Fancy subheader
         int i = ((30 - t.length()) / 2) - 2;
         System.out.printf(ANSI_WHITE + "*");
         for(int k = 0; k < i; k++){
@@ -109,7 +105,7 @@ public class Console {
             String input = reader.readLine();
             switch(input.toLowerCase()){
                 case "alphabet":
-                    RankedAlphabet A = readAlph(reader);
+                    RankedAlphabet A = readAlphabet(reader);
                     if(A != null){
                         alphabets.add(A);
                         return;
@@ -190,7 +186,7 @@ public class Console {
                     System.out.println(ANSI_CYAN + u.getNameGeneral(typeList.get(i)) + ANSI_RESET);
                 }
 
-                String input = reader.readLine().toLowerCase();
+                String input = reader.readLine();
                 if(input.equals("back") || input.equals("b")){
                     return null;
                 } else if(u.containsGeneral(typeList, input)) {
@@ -220,7 +216,7 @@ public class Console {
                 String comm = reader.readLine();
 
                 if((comm.toLowerCase()).equals("alphabet")) {
-                    RankedAlphabet A = readAlph(reader);
+                    RankedAlphabet A = readAlphabet(reader);
                     alphabets.add(A);
                 } else if((comm.toLowerCase()).equals("tree")) {
                     Tree A = readTree(reader);
@@ -251,7 +247,7 @@ public class Console {
 
     }
 
-    public RankedAlphabet readAlph(BufferedReader reader){
+    public RankedAlphabet readAlphabet(BufferedReader reader){
         try{
             String name;
             printSubHeader("Defining new Alphabet");
@@ -738,7 +734,7 @@ public class Console {
         System.out.printf(ANSI_GREEN);
         System.out.println("new - Create a new object, alphabet, tree or automaton");
         System.out.println("modify - Modify existing objects, alphabets or automata (trees not yet modifiable)");
-        System.out.println("operate - Test trees for acceptance with automata");
+        System.out.println("operate - Reduce a tree using an automaton");
         System.out.println("General information on tree automata and the operation process can be found in the GUI tutorial or doc");
         System.out.printf(ANSI_RESET);
     }

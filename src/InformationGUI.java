@@ -23,7 +23,6 @@ public class InformationGUI {
         this.b = b;
 
         Stage window = new Stage();
-        window.initModality(Modality.APPLICATION_MODAL);
         showInfo(window);
     }
 
