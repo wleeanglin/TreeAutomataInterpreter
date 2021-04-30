@@ -17,15 +17,12 @@ public class Console {
     private ArrayList<RankedAlphabet> alphabets;
     private ArrayList<Tree> trees;
     private ArrayList<TreeAutomaton> automata;
-    private ArrayList<ArrayList<Tree>> histories;
-
     private Utility u;
 
     public Console(BufferedReader reader){
         this.alphabets = new ArrayList<>();
         this.trees = new ArrayList<>();
         this.automata = new ArrayList<>();
-        this.histories = new ArrayList<>();
         this.u = new Utility();
         ArrayList<RankedAlphabet> exampleAlphs = u.getExampleAlphabets();
         this.alphabets.addAll(exampleAlphs);
@@ -63,6 +60,7 @@ public class Console {
     }
 
     private void printHeader(String t){
+        //Fancy header
         int i = ((30 - t.length()) / 2) - 1;
         int j = (30 - (i + t.length())) - 2;
         System.out.println(ANSI_WHITE + "*============================*");
@@ -200,51 +198,6 @@ public class Console {
                 }
             }
         }
-    }
-
-
-    //deprecated
-    public void waitForCommand(){
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-
-        try{
-            while(true){
-                System.out.println(ANSI_WHITE + "##### Main Menu #####" + ANSI_RESET);
-                //printCommands();
-                System.out.println(ANSI_GREEN + "Waiting for command..." + ANSI_RESET);
-
-                String comm = reader.readLine();
-
-                if((comm.toLowerCase()).equals("alphabet")) {
-                    RankedAlphabet A = readAlphabet(reader);
-                    alphabets.add(A);
-                } else if((comm.toLowerCase()).equals("tree")) {
-                    Tree A = readTree(reader);
-                    if (A != null) {
-                        trees.add(A);
-                    }
-                } else if((comm.toLowerCase()).equals("automaton")) {
-                    TreeAutomaton A = readAutomaton(reader);
-                    if (A != null) {
-                        automata.add(A);
-                    }
-                } else if((comm.toLowerCase()).equals("operate")){
-                    readOperation(reader);
-                } else if((comm.toLowerCase()).equals("help")) {
-                    printHelp();
-                } else if((comm.toLowerCase()).equals("printtrees")){
-                    for(int i = 0; i < this.trees.size(); i++){
-                        trees.get(i).print();
-                        System.out.println("Height = " + trees.get(i).getMaxHeight());
-                    }
-                } else{
-                    System.out.println(ANSI_RED + "Command not recognised" + ANSI_RESET);
-                }
-            }
-        } catch (IOException e){
-
-        }
-
     }
 
     public RankedAlphabet readAlphabet(BufferedReader reader){

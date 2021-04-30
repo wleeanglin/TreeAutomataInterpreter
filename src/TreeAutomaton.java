@@ -231,7 +231,7 @@ public class TreeAutomaton {
         Tree.Node n = levels.get(h).get(w);
         TransitionRule r = this.getRule(n.getData(), n.getChildrenAsString());
         if(r != null){
-            //This part is for states so it gets rid of them :)
+            //This part is for states so it gets rid of them
             for(int i = 0; i < n.getChildren().size(); i++){
                 if(n.getChildren().get(i).getState()){
                     n.getChildren().set(i, n.getChildren().get(i).getChildren().get(0));
@@ -244,7 +244,6 @@ public class TreeAutomaton {
             if(n.getParent() != null){
                 for(int i = 0; i < n.getParent().getChildren().size(); i++){
                     if(n.getParent().getChildren().get(i).equals(n)){
-                        //if(n.getParent().getChildren().get(i).getData().equals(n.getData()) && n.getParent().getChildren().get(i).getChildren().equals(n.getChildren())){
                         n.getParent().getChildren().set(i, newNode);
                     }
                 }
@@ -479,5 +478,4 @@ public class TreeAutomaton {
     public Boolean getComplete(){
         return this.complete;
     }
-
 }

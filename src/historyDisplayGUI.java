@@ -29,7 +29,6 @@ public class historyDisplayGUI{
         //maybe have max width as a function of the current width?
         status.setMaxWidth(350);
 
-        //see how far along in the history we are
         //this is ugly hack
         int[] counter = {0};
 

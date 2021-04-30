@@ -39,7 +39,7 @@ public class ModifyAlphabetGUI {
 
         Label selectAlphabet = new Label("Select Alphabet");
 
-        alphabetList = new ListView<String>();
+        alphabetList = new ListView<>();
         alphabetList.setPrefHeight(200);
         alphabetList.setPrefWidth(175);
         ObservableList<String> alphabetsDisplay = FXCollections.observableArrayList(u.getAlphabetNames(this.alphabets));

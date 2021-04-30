@@ -273,5 +273,4 @@ public class ModifyAutomatonGUI {
         Scene getFinalStatesScene = new Scene(vert, 400, 400);
         window.setScene(getFinalStatesScene);
     }
-
 }

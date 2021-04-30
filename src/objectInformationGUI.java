@@ -127,6 +127,4 @@ public class objectInformationGUI {
         window.setScene(error);
         window.showAndWait();
     }
-
-
 }

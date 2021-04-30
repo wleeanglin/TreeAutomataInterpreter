@@ -32,5 +32,4 @@ public class ErrorGUI {
         window.setScene(error);
         window.showAndWait();
     }
-
 }

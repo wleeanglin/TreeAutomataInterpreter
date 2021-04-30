@@ -9,7 +9,7 @@ public class Tree {
     private String name;
     private RankedAlphabet alphabet;
 
-    //For building tree;
+    //For building tree in GUI
     private Node currentNode;
     private ArrayList<Node> toComplete;
     private Boolean complete = false;
@@ -344,5 +344,4 @@ public class Tree {
             this.state = t;
         }
     }
-
 }

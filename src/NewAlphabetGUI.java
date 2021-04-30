@@ -8,7 +8,6 @@ import javafx.geometry.*;
 
 import java.util.ArrayList;
 
-
 public class NewAlphabetGUI {
 
     private Utility u;
@@ -25,11 +24,8 @@ public class NewAlphabetGUI {
         u = new Utility();
         this.alphabets = alphabets;
         this.r = r;
-        //unexpected closing
 
         Stage window = new Stage();
-        //Have to deal with this before closing the window
-        //window.initModality(Modality.APPLICATION_MODAL);
 
         getName(window);
     }
@@ -192,5 +188,4 @@ public class NewAlphabetGUI {
         Scene getElementsScene = new Scene(vert, 400, 400);
         window.setScene(getElementsScene);
     }
-
 }

@@ -29,8 +29,6 @@ public class NewAutomatonGUI {
 
         Stage window = new Stage();
 
-        //window.initModality(Modality.APPLICATION_MODAL);
-
         getName(window);
     }
 

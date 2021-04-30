@@ -29,8 +29,6 @@ public class NewTreeGUI {
 
         Stage window = new Stage();
 
-        //window.initModality(Modality.APPLICATION_MODAL);
-
         getName(window);
     }
 
@@ -175,8 +173,5 @@ public class NewTreeGUI {
 
         Scene buildTreeScene = new Scene(vert, 400, 400);
         window.setScene(buildTreeScene);
-
-
     }
-
 }

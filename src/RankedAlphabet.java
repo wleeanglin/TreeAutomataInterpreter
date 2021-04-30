@@ -233,6 +233,4 @@ public class RankedAlphabet {
 
         return b;
     }
-
-
 }

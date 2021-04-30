@@ -19,8 +19,6 @@ public class GUI extends Application{
     private ArrayList<RankedAlphabet> alphabets;
     private ArrayList<Tree> trees;
     private ArrayList<TreeAutomaton> automata;
-    //private ArrayList<ArrayList<Tree>> histories;
-
     private Utility u;
 
     public static void main(String[] args){
@@ -35,7 +33,6 @@ public class GUI extends Application{
         this.alphabets = new ArrayList<>();
         this.trees = new ArrayList<>();
         this.automata = new ArrayList<>();
-        //this.histories = new ArrayList<>();
         this.u = new Utility();
         ArrayList<RankedAlphabet> exampleAlphs = u.getExampleAlphabets();
         this.alphabets.addAll(exampleAlphs);
@@ -251,5 +248,4 @@ public class GUI extends Application{
         Scene tutorialScene = new Scene(vert, 400, 400);
         window.setScene(tutorialScene);
     }
-
 }

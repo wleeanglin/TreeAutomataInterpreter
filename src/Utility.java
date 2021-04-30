@@ -213,5 +213,4 @@ public class Utility {
         r.setNewState(next);
         return r;
     }
-
 }
